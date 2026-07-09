@@ -14,8 +14,12 @@ export function ProductCard({ product }: { product: Product }) {
   const isLowStock = level === "low";
 
   return (
-    <Link href={`/roti/${product.id}`}>
-      <Card className="gap-0 overflow-hidden py-0 transition-shadow hover:shadow-md">
+    <Link
+      href={`/roti/${product.id}`}
+      aria-label={`Lihat detail ${product.name}`}
+      className="block h-full rounded-xl focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+    >
+      <Card className="h-full gap-0 overflow-hidden py-0 transition-shadow hover:shadow-md">
         <div className="relative aspect-4/3 w-full overflow-hidden bg-muted">
           <Image
             src={product.imageUrl}
