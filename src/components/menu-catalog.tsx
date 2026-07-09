@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Search } from "lucide-react";
+import { Search, WheatOff } from "lucide-react";
 
 import { ProductCard } from "@/components/product-card";
 import { Input } from "@/components/ui/input";
@@ -25,6 +25,13 @@ export function MenuCatalog({ products }: { products: Product[] }) {
       return matchesCategory && matchesQuery;
     });
   }, [products, query, category]);
+
+  const hasActiveFilter = query.trim().length > 0 || category !== "Semua";
+
+  function resetFilters() {
+    setQuery("");
+    setCategory("Semua");
+  }
 
   return (
     <div>
@@ -68,11 +75,21 @@ export function MenuCatalog({ products }: { products: Product[] }) {
       </div>
 
       {filtered.length === 0 ? (
-        <div className="flex flex-col items-center justify-center gap-1 rounded-lg border border-dashed py-16 text-center">
+        <div className="flex flex-col items-center justify-center gap-2 rounded-lg border border-dashed py-16 text-center">
+          <WheatOff className="size-8 text-muted-foreground" aria-hidden="true" />
           <p className="font-medium">Roti tidak ditemukan</p>
           <p className="text-sm text-muted-foreground">
             Coba kata kunci atau kategori lain.
           </p>
+          {hasActiveFilter && (
+            <button
+              type="button"
+              onClick={resetFilters}
+              className="mt-1 text-sm font-medium text-primary hover:underline"
+            >
+              Reset pencarian
+            </button>
+          )}
         </div>
       ) : (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
