@@ -1,4 +1,4 @@
-import { ProductCard } from "@/components/product-card";
+import { MenuCatalog } from "@/components/menu-catalog";
 import { MOCK_PRODUCTS } from "@/lib/mock-products";
 
 export default function Home() {
@@ -14,18 +14,7 @@ export default function Home() {
       </header>
 
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-6">
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-medium">Menu Roti</h2>
-          <span className="text-sm text-muted-foreground">
-            {MOCK_PRODUCTS.length} roti tersedia
-          </span>
-        </div>
-
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-          {MOCK_PRODUCTS.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        <MenuCatalog products={MOCK_PRODUCTS} />
       </main>
     </div>
   );
