@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Clock } from "lucide-react";
 
+import { AddToCartButton } from "@/components/add-to-cart-button";
 import { Badge } from "@/components/ui/badge";
 import { StockStatusLabel } from "@/components/stock-status-label";
 import { getProductById, MOCK_PRODUCTS } from "@/lib/mock-products";
@@ -85,6 +86,13 @@ export default async function RotiDetailPage({
               {product.description}
             </p>
           </div>
+
+          <AddToCartButton
+            product={product}
+            isOutOfStock={isOutOfStock}
+            size="lg"
+            className="mt-2 w-full sm:w-fit"
+          />
         </div>
       </main>
     </div>

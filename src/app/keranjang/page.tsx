@@ -1,43 +1,17 @@
 "use client";
 
-import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { MOCK_CART } from "@/lib/mock-cart";
+import { useCart } from "@/context/cart-context";
 import { formatPrice } from "@/lib/utils";
-import type { CartItem } from "@/lib/types";
 
 export default function KeranjangPage() {
-  const [items, setItems] = useState<CartItem[]>(MOCK_CART);
-
-  const summary = useMemo(() => {
-    const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
-    const totalPrice = items.reduce(
-      (sum, item) => sum + item.product.price * item.quantity,
-      0
-    );
-    return { totalItems, totalPrice };
-  }, [items]);
-
-  function updateQuantity(productId: string, delta: number) {
-    setItems((prev) =>
-      prev
-        .map((item) =>
-          item.product.id === productId
-            ? { ...item, quantity: item.quantity + delta }
-            : item
-        )
-        .filter((item) => item.quantity > 0)
-    );
-  }
-
-  function removeItem(productId: string) {
-    setItems((prev) => prev.filter((item) => item.product.id !== productId));
-  }
+  const { items, totalItems, totalPrice, updateQuantity, removeItem } =
+    useCart();
 
   return (
     <div className="flex flex-1 flex-col">
@@ -143,11 +117,11 @@ export default function KeranjangPage() {
               <h2 className="font-medium">Ringkasan Pesanan</h2>
               <div className="flex items-center justify-between text-sm text-muted-foreground">
                 <span>Jumlah item</span>
-                <span>{summary.totalItems} pcs</span>
+                <span>{totalItems} pcs</span>
               </div>
               <div className="flex items-center justify-between border-t pt-3 font-semibold">
                 <span>Total</span>
-                <span>{formatPrice(summary.totalPrice)}</span>
+                <span>{formatPrice(totalPrice)}</span>
               </div>
             </Card>
           </div>

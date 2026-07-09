@@ -1,13 +1,8 @@
-import Link from "next/link";
-import { ShoppingBag } from "lucide-react";
-
+import { CartBadgeLink } from "@/components/cart-badge-link";
 import { MenuCatalog } from "@/components/menu-catalog";
-import { MOCK_CART } from "@/lib/mock-cart";
 import { MOCK_PRODUCTS } from "@/lib/mock-products";
 
 export default function Home() {
-  const cartCount = MOCK_CART.reduce((sum, item) => sum + item.quantity, 0);
-
   return (
     <div className="flex flex-1 flex-col">
       <header className="border-b bg-card">
@@ -18,18 +13,7 @@ export default function Home() {
               Pesan roti favoritmu online, ambil tanpa antre di toko.
             </p>
           </div>
-          <Link
-            href="/keranjang"
-            aria-label={`Keranjang, ${cartCount} item`}
-            className="relative inline-flex size-9 shrink-0 items-center justify-center rounded-lg border border-border hover:bg-muted focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-          >
-            <ShoppingBag className="size-4.5" />
-            {cartCount > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 flex size-4.5 items-center justify-center rounded-full bg-primary text-[10px] font-semibold text-primary-foreground">
-                {cartCount}
-              </span>
-            )}
-          </Link>
+          <CartBadgeLink />
         </div>
       </header>
 

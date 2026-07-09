@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { AddToCartButton } from "@/components/add-to-cart-button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { StockStatusLabel } from "@/components/stock-status-label";
@@ -57,9 +58,16 @@ export function ProductCard({ product }: { product: Product }) {
             {product.description}
           </p>
         </CardContent>
-        <CardFooter className="flex items-center justify-between px-4 pt-2 pb-4">
-          <span className="font-semibold">{formatPrice(product.price)}</span>
-          <StockStatusLabel product={product} />
+        <CardFooter className="flex flex-col items-stretch gap-2 px-4 pt-2 pb-4">
+          <div className="flex items-center justify-between">
+            <span className="font-semibold">{formatPrice(product.price)}</span>
+            <StockStatusLabel product={product} />
+          </div>
+          <AddToCartButton
+            product={product}
+            isOutOfStock={isOutOfStock}
+            className="w-full"
+          />
         </CardFooter>
       </Card>
     </Link>
