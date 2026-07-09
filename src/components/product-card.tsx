@@ -2,7 +2,7 @@ import Image from "next/image";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { formatPrice } from "@/lib/utils";
+import { cn, formatPrice } from "@/lib/utils";
 import type { Product } from "@/lib/types";
 
 export function ProductCard({ product }: { product: Product }) {
@@ -48,8 +48,26 @@ export function ProductCard({ product }: { product: Product }) {
           {product.description}
         </p>
       </CardContent>
-      <CardFooter className="px-4 pt-2 pb-4">
+      <CardFooter className="flex items-center justify-between px-4 pt-2 pb-4">
         <span className="font-semibold">{formatPrice(product.price)}</span>
+        <span
+          className={cn(
+            "flex items-center gap-1.5 text-xs font-medium",
+            isOutOfStock && "text-destructive",
+            isLowStock && "text-amber-600 dark:text-amber-500",
+            !isOutOfStock && !isLowStock && "text-emerald-600 dark:text-emerald-500"
+          )}
+        >
+          <span
+            className={cn(
+              "size-1.5 rounded-full",
+              isOutOfStock && "bg-destructive",
+              isLowStock && "bg-amber-600 dark:bg-amber-500",
+              !isOutOfStock && !isLowStock && "bg-emerald-600 dark:bg-emerald-500"
+            )}
+          />
+          {isOutOfStock ? "Habis" : isLowStock ? "Stok Terbatas" : "Tersedia"}
+        </span>
       </CardFooter>
     </Card>
   );
