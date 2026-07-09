@@ -63,7 +63,19 @@ export async function getCartSummary(cartId: string) {
     0
   );
 
-  return { id: cartId, items, totalItems, totalPrice };
+  const [order] = await db
+    .select({ status: orders.status, pickupTime: orders.pickupTime })
+    .from(orders)
+    .where(eq(orders.id, cartId));
+
+  return {
+    id: cartId,
+    items,
+    totalItems,
+    totalPrice,
+    status: order?.status ?? null,
+    pickupTime: order?.pickupTime ?? null,
+  };
 }
 
 export async function recalcCartTotal(cartId: string) {

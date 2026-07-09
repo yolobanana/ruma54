@@ -6,7 +6,16 @@ export async function GET() {
   const cartId = await getCartId();
 
   if (!cartId) {
-    return NextResponse.json({ cart: { id: null, items: [], totalItems: 0, totalPrice: 0 } });
+    return NextResponse.json({
+      cart: {
+        id: null,
+        items: [],
+        totalItems: 0,
+        totalPrice: 0,
+        status: null,
+        pickupTime: null,
+      },
+    });
   }
 
   const cart = await getCartSummary(cartId);
