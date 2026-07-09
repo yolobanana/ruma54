@@ -1,5 +1,9 @@
 import type { Product } from "@/lib/types";
 
+export function getProductById(id: string): Product | undefined {
+  return MOCK_PRODUCTS.find((product) => product.id === id);
+}
+
 export const CATEGORIES = [
   "Semua",
   "Roti Manis",
@@ -18,6 +22,7 @@ export const MOCK_PRODUCTS: Product[] = [
     stock: 12,
     imageUrl: "/products/roti-kasur-manis.svg",
     category: "Roti Manis",
+    bakeEtaMinutes: 15,
   },
   {
     id: "roti-coklat-keju",
@@ -54,6 +59,7 @@ export const MOCK_PRODUCTS: Product[] = [
     stock: 6,
     imageUrl: "/products/croissant-butter.svg",
     category: "Pastry",
+    bakeEtaMinutes: 20,
   },
   {
     id: "danish-blueberry",
@@ -63,6 +69,7 @@ export const MOCK_PRODUCTS: Product[] = [
     stock: 4,
     imageUrl: "/products/danish-blueberry.svg",
     category: "Pastry",
+    bakeEtaMinutes: 12,
   },
   {
     id: "donat-gula",

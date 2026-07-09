@@ -6,4 +6,6 @@ export interface Product {
   stock: number;
   imageUrl: string;
   category: string;
+  /** Minutes until a fresh batch is out of the oven; omitted when already ready. */
+  bakeEtaMinutes?: number;
 }
