@@ -54,6 +54,7 @@ export async function getCartSummary(cartId: string) {
     id: row.itemId,
     quantity: row.quantity,
     product: row.product,
+    subtotal: row.product.price * row.quantity,
   }));
 
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
