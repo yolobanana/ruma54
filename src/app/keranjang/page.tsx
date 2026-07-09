@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
 
+import { SiteHeader } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useCart } from "@/context/cart-context";
@@ -15,18 +16,16 @@ export default function KeranjangPage() {
 
   return (
     <div className="flex flex-1 flex-col">
-      <header className="border-b bg-card">
-        <div className="mx-auto flex max-w-3xl flex-col gap-1 px-4 py-6 sm:px-6">
-          <Link
-            href="/"
-            className="inline-flex w-fit items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
-          >
-            <ArrowLeft className="size-4" />
-            Kembali ke Menu
-          </Link>
-          <h1 className="text-2xl font-semibold">Keranjang</h1>
-        </div>
-      </header>
+      <SiteHeader maxWidthClassName="max-w-3xl">
+        <Link
+          href="/"
+          className="inline-flex w-fit items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+        >
+          <ArrowLeft className="size-4" />
+          Kembali ke Menu
+        </Link>
+        <h1 className="text-2xl font-semibold">Keranjang</h1>
+      </SiteHeader>
 
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-6 sm:px-6">
         {items.length === 0 ? (

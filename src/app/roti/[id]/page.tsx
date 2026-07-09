@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, Clock } from "lucide-react";
 
 import { AddToCartButton } from "@/components/add-to-cart-button";
+import { SiteHeader } from "@/components/site-header";
 import { Badge } from "@/components/ui/badge";
 import { StockStatusLabel } from "@/components/stock-status-label";
 import { getProductById, MOCK_PRODUCTS } from "@/lib/mock-products";
@@ -30,17 +31,17 @@ export default async function RotiDetailPage({
 
   return (
     <div className="flex flex-1 flex-col">
-      <div className="mx-auto w-full max-w-3xl px-4 py-4 sm:px-6">
+      <SiteHeader maxWidthClassName="max-w-3xl">
         <Link
           href="/"
-          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+          className="inline-flex w-fit items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
         >
           <ArrowLeft className="size-4" />
           Kembali ke Menu
         </Link>
-      </div>
+      </SiteHeader>
 
-      <main className="mx-auto w-full max-w-3xl flex-1 px-4 pb-10 sm:px-6">
+      <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-6 sm:px-6">
         <div className="relative aspect-4/3 w-full overflow-hidden rounded-xl bg-muted">
           <Image
             src={product.imageUrl}
