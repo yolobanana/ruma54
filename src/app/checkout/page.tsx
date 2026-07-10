@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ArrowLeft, Check, ShoppingBag } from "lucide-react";
 
 import { SiteHeader } from "@/components/site-header";
@@ -12,6 +13,7 @@ import { PAYMENT_METHOD_GROUPS } from "@/lib/mock-payment-methods";
 import { cn, formatPrice } from "@/lib/utils";
 
 export default function CheckoutPage() {
+  const router = useRouter();
   const { items, totalItems, totalPrice } = useCart();
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
 
@@ -105,7 +107,16 @@ export default function CheckoutPage() {
               ))}
             </div>
 
-            <Button size="lg" className="w-full" disabled={!selectedMethod}>
+            <Button
+              size="lg"
+              className="w-full"
+              disabled={!selectedMethod}
+              onClick={() => {
+                if (selectedMethod) {
+                  router.push(`/checkout/konfirmasi?method=${selectedMethod}`);
+                }
+              }}
+            >
               {selectedMethod
                 ? "Konfirmasi Pembayaran"
                 : "Pilih metode pembayaran dulu"}

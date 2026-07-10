@@ -5,6 +5,8 @@ export interface PaymentMethod {
   name: string;
   type: PaymentMethodType;
   description: string;
+  /** Mock virtual account number, shown for bank transfer methods. */
+  virtualAccount?: string;
 }
 
 export const PAYMENT_METHOD_GROUPS: {
@@ -57,18 +59,21 @@ export const PAYMENT_METHOD_GROUPS: {
         name: "Transfer BCA",
         type: "bank",
         description: "Transfer manual ke rekening virtual BCA",
+        virtualAccount: "39012345678901",
       },
       {
         id: "mandiri",
         name: "Transfer Mandiri",
         type: "bank",
         description: "Transfer manual ke rekening virtual Mandiri",
+        virtualAccount: "88808123456789",
       },
       {
         id: "bni",
         name: "Transfer BNI",
         type: "bank",
         description: "Transfer manual ke rekening virtual BNI",
+        virtualAccount: "98800123456789",
       },
     ],
   },
