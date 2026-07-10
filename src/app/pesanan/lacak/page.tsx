@@ -1,10 +1,11 @@
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { ArrowLeft, Clock, PartyPopper } from "lucide-react";
 
+import { NotificationToast } from "@/components/notification-toast";
 import { OrderStatusTimeline } from "@/components/order-status-timeline";
 import { SiteHeader } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
@@ -29,9 +30,17 @@ function LacakPesananContent() {
   const { currentStep, currentStatus, isSimulating } = useSimulatedOrderStatus(
     searchParams.get("status")
   );
+  const [notificationDismissed, setNotificationDismissed] = useState(false);
+  const isReady = currentStatus === "siap_diambil";
 
   return (
     <div className="flex flex-1 flex-col">
+      <NotificationToast
+        show={isReady && !notificationDismissed}
+        title="Pesanan Siap Diambil!"
+        message="Roti pesananmu sudah dibungkus dan siap diambil di loket toko."
+        onDismiss={() => setNotificationDismissed(true)}
+      />
       <SiteHeader maxWidthClassName="max-w-3xl">
         <Link
           href="/"
