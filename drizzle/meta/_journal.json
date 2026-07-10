@@ -15,6 +15,13 @@
       "when": 1783609748832,
       "tag": "0001_skinny_reptil",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1783666947931,
+      "tag": "0002_slow_bastion",
+      "breakpoints": true
     }
   ]
 }

@@ -59,7 +59,7 @@ function StatusPembayaranContent() {
           {isPaid ? (
             <Button asChild size="lg" className="w-full">
               <Link
-                href={`/pesanan/lacak?status=diterima&method=${
+                href={`/pesanan/lacak?status=baru&method=${
                   method?.id ?? ""
                 }&total=${total}`}
               >
