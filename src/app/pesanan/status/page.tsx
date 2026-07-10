@@ -56,9 +56,21 @@ function StatusPembayaranContent() {
             </div>
           </Card>
 
-          <Button asChild size="lg" className="w-full">
-            <Link href="/">Kembali ke Menu Roti</Link>
-          </Button>
+          {isPaid ? (
+            <Button asChild size="lg" className="w-full">
+              <Link
+                href={`/pesanan/lacak?status=diterima&method=${
+                  method?.id ?? ""
+                }&total=${total}`}
+              >
+                Lacak Pesanan
+              </Link>
+            </Button>
+          ) : (
+            <Button asChild size="lg" className="w-full">
+              <Link href="/">Kembali ke Menu Roti</Link>
+            </Button>
+          )}
         </div>
       </main>
     </div>
