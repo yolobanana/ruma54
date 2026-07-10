@@ -14,6 +14,7 @@ interface CartContextValue {
   addItem: (product: Product, quantity?: number) => void;
   updateQuantity: (productId: string, delta: number) => void;
   removeItem: (productId: string) => void;
+  clearCart: () => void;
 }
 
 const CartContext = createContext<CartContextValue | null>(null);
@@ -61,6 +62,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setItems((prev) => prev.filter((item) => item.product.id !== productId));
   }
 
+  function clearCart() {
+    setItems([]);
+  }
+
   function getQuantity(productId: string) {
     return items.find((item) => item.product.id === productId)?.quantity ?? 0;
   }
@@ -84,6 +89,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     addItem,
     updateQuantity,
     removeItem,
+    clearCart,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

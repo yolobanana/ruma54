@@ -123,6 +123,10 @@ export default function KeranjangPage() {
                 <span>{formatPrice(totalPrice)}</span>
               </div>
             </Card>
+
+            <Button asChild size="lg" className="w-full">
+              <Link href="/checkout">Lanjut ke Pembayaran</Link>
+            </Button>
           </div>
         )}
       </main>
