@@ -3,7 +3,7 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Clock, PartyPopper } from "lucide-react";
 
 import { OrderStatusTimeline } from "@/components/order-status-timeline";
 import { SiteHeader } from "@/components/site-header";
@@ -53,13 +53,25 @@ function LacakPesananContent() {
               {currentStep.label}
             </span>
             {isSimulating && (
-              <span className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
+              <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
                 <span className="relative flex size-2">
                   <span className="absolute inline-flex size-full animate-ping rounded-full bg-primary/75" />
                   <span className="relative inline-flex size-2 rounded-full bg-primary" />
                 </span>
                 Memperbarui otomatis&hellip;
               </span>
+            )}
+
+            {currentStep.etaMinutes !== undefined ? (
+              <div className="mt-2 flex items-center gap-2 rounded-lg border bg-accent/50 px-3 py-2 text-sm text-accent-foreground">
+                <Clock className="size-4 shrink-0" />
+                Estimasi siap dalam kurang lebih {currentStep.etaMinutes} menit
+              </div>
+            ) : (
+              <div className="mt-2 flex items-center gap-2 rounded-lg border border-emerald-600/30 bg-emerald-600/10 px-3 py-2 text-sm text-emerald-700 dark:text-emerald-400">
+                <PartyPopper className="size-4 shrink-0" />
+                Pesananmu sudah siap diambil!
+              </div>
             )}
           </Card>
 

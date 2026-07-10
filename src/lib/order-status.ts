@@ -4,6 +4,8 @@ export interface OrderStatusStep {
   key: OrderQueueStatus;
   label: string;
   description: string;
+  /** Estimated minutes remaining until the order is ready; omitted once ready. */
+  etaMinutes?: number;
 }
 
 export const ORDER_STATUS_STEPS: OrderStatusStep[] = [
@@ -11,11 +13,13 @@ export const ORDER_STATUS_STEPS: OrderStatusStep[] = [
     key: "diterima",
     label: "Diterima",
     description: "Pesananmu sudah kami terima dan akan segera disiapkan.",
+    etaMinutes: 15,
   },
   {
     key: "diproses",
     label: "Diproses",
     description: "Roti pilihanmu sedang disiapkan/dipanggang di dapur.",
+    etaMinutes: 8,
   },
   {
     key: "siap_diambil",
