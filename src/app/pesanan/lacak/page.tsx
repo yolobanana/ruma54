@@ -1,9 +1,9 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { ArrowLeft, Clock, PartyPopper } from "lucide-react";
+import { ArrowLeft, Bell, Clock, PartyPopper } from "lucide-react";
 
 import { NotificationToast } from "@/components/notification-toast";
 import { OrderStatusTimeline } from "@/components/order-status-timeline";
@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { getPaymentMethodById } from "@/lib/mock-payment-methods";
 import { formatPrice } from "@/lib/utils";
+import { useBrowserNotification } from "@/lib/use-browser-notification";
 import { useSimulatedOrderStatus } from "@/lib/use-simulated-order-status";
 
 export default function LacakPesananPage() {
@@ -32,6 +33,18 @@ function LacakPesananContent() {
   );
   const [notificationDismissed, setNotificationDismissed] = useState(false);
   const isReady = currentStatus === "siap_diambil";
+
+  const { permission, requestPermission, notify } = useBrowserNotification();
+  const hasNotifiedRef = useRef(false);
+
+  useEffect(() => {
+    if (isReady && !hasNotifiedRef.current) {
+      hasNotifiedRef.current = true;
+      notify("Pesanan Siap Diambil!", {
+        body: "Roti pesananmu sudah dibungkus dan siap diambil di loket toko.",
+      });
+    }
+  }, [isReady, notify]);
 
   return (
     <div className="flex flex-1 flex-col">
@@ -54,6 +67,27 @@ function LacakPesananContent() {
 
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-6 sm:px-6">
         <div className="flex flex-col gap-6">
+          {permission === "default" && (
+            <Card className="flex-row items-center justify-between gap-3 p-4">
+              <div className="flex items-center gap-3">
+                <Bell className="size-5 shrink-0 text-muted-foreground" />
+                <p className="text-sm text-muted-foreground">
+                  Aktifkan notifikasi browser biar tetap tahu meski tidak
+                  membuka aplikasi ini.
+                </p>
+              </div>
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                className="shrink-0"
+                onClick={requestPermission}
+              >
+                Aktifkan
+              </Button>
+            </Card>
+          )}
+
           <Card className="items-center gap-1 p-4 text-center">
             <span className="text-sm text-muted-foreground">
               Status pesanan saat ini
