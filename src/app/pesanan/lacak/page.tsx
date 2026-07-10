@@ -32,7 +32,7 @@ function LacakPesananContent() {
     searchParams.get("status")
   );
   const [notificationDismissed, setNotificationDismissed] = useState(false);
-  const isReady = currentStatus === "siap_diambil";
+  const isReady = currentStatus === "siap";
 
   const { permission, requestPermission, notify } = useBrowserNotification();
   const hasNotifiedRef = useRef(false);

@@ -65,6 +65,9 @@ export async function POST(request: Request) {
       id: randomUUID(),
       orderId: cartId,
       productId,
+      // Snapshot at the moment the item enters the order — see orders-contract (issue #5).
+      productName: product.name,
+      unitPrice: product.price,
       quantity: nextQuantity,
     });
   }

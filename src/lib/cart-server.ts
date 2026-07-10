@@ -1,9 +1,9 @@
-import { randomUUID } from "crypto";
 import { and, eq } from "drizzle-orm";
 import { cookies } from "next/headers";
 
 import { db } from "@/db";
-import { orderItems, orders, products } from "@/db/schema";
+import { CART_STATUS, orderItems, orders, products } from "@/db/schema";
+import { generateOrderId } from "@/lib/order-id";
 
 export const CART_COOKIE = "rotipilih_cart_id";
 export const CART_COOKIE_MAX_AGE = 60 * 60 * 24 * 7; // 7 days
@@ -25,10 +25,11 @@ export async function getOrCreateCartId(): Promise<{
     }
   }
 
-  const cartId = randomUUID();
+  const cartId = generateOrderId();
   await db.insert(orders).values({
     id: cartId,
-    status: "menunggu_pembayaran",
+    status: CART_STATUS,
+    paymentStatus: "belum_dibayar",
     totalPrice: 0,
   });
   return { cartId, isNew: true };
@@ -44,6 +45,8 @@ export async function getCartSummary(cartId: string) {
     .select({
       itemId: orderItems.id,
       quantity: orderItems.quantity,
+      productName: orderItems.productName,
+      unitPrice: orderItems.unitPrice,
       product: products,
     })
     .from(orderItems)
@@ -53,18 +56,20 @@ export async function getCartSummary(cartId: string) {
   const items = rows.map((row) => ({
     id: row.itemId,
     quantity: row.quantity,
-    product: row.product,
-    subtotal: row.product.price * row.quantity,
+    // Snapshot name/price win over the live product row — see orders-contract (issue #5).
+    product: { ...row.product, name: row.productName, price: row.unitPrice },
+    subtotal: row.unitPrice * row.quantity,
   }));
 
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
-  const totalPrice = items.reduce(
-    (sum, item) => sum + item.product.price * item.quantity,
-    0
-  );
+  const totalPrice = items.reduce((sum, item) => sum + item.subtotal, 0);
 
   const [order] = await db
-    .select({ status: orders.status, pickupTime: orders.pickupTime })
+    .select({
+      status: orders.status,
+      paymentStatus: orders.paymentStatus,
+      pickupTime: orders.pickupTime,
+    })
     .from(orders)
     .where(eq(orders.id, cartId));
 
@@ -74,6 +79,7 @@ export async function getCartSummary(cartId: string) {
     totalItems,
     totalPrice,
     status: order?.status ?? null,
+    paymentStatus: order?.paymentStatus ?? null,
     pickupTime: order?.pickupTime ?? null,
   };
 }

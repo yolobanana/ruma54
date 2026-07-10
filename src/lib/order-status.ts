@@ -1,4 +1,9 @@
-export type OrderQueueStatus = "diterima" | "diproses" | "siap_diambil";
+/**
+ * Mirrors the shared fulfilment vocabulary from src/db/schema.ts (ORDER_STATUSES),
+ * agreed with the admin side in issue #5. Only the "still waiting to be picked up"
+ * steps are shown here — "selesai" and "dibatalkan" fall outside this tracker.
+ */
+export type OrderQueueStatus = "baru" | "diproses" | "siap";
 
 export interface OrderStatusStep {
   key: OrderQueueStatus;
@@ -10,8 +15,8 @@ export interface OrderStatusStep {
 
 export const ORDER_STATUS_STEPS: OrderStatusStep[] = [
   {
-    key: "diterima",
-    label: "Diterima",
+    key: "baru",
+    label: "Pesanan Baru",
     description: "Pesananmu sudah kami terima dan akan segera disiapkan.",
     etaMinutes: 15,
   },
@@ -22,7 +27,7 @@ export const ORDER_STATUS_STEPS: OrderStatusStep[] = [
     etaMinutes: 8,
   },
   {
-    key: "siap_diambil",
+    key: "siap",
     label: "Siap Diambil",
     description: "Pesananmu sudah dibungkus, siap diambil di loket toko.",
   },
