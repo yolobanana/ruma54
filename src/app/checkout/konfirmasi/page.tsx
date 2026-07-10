@@ -3,16 +3,10 @@
 import { Suspense, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import {
-  ArrowLeft,
-  Building2,
-  CheckCircle2,
-  QrCode,
-  Wallet,
-} from "lucide-react";
+import { ArrowLeft, Building2, QrCode, Wallet } from "lucide-react";
 
+import { PaymentStatusIndicator } from "@/components/payment-status-indicator";
 import { SiteHeader } from "@/components/site-header";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useCart } from "@/context/cart-context";
@@ -90,10 +84,9 @@ function KonfirmasiPembayaranContent() {
                 {formatPrice(totalPrice)}
               </span>
             </div>
-            <Badge variant={confirmed ? "default" : "secondary"}>
-              {confirmed ? "Lunas" : "Belum Dibayar"}
-            </Badge>
           </Card>
+
+          <PaymentStatusIndicator isPaid={confirmed} />
 
           <Card className="gap-4 p-4">
             <h2 className="font-medium">Instruksi Pembayaran &mdash; {method.name}</h2>
@@ -149,22 +142,20 @@ function KonfirmasiPembayaranContent() {
           </Card>
 
           {confirmed ? (
-            <div className="flex items-center gap-2 rounded-lg border border-emerald-600/30 bg-emerald-600/10 p-4 text-emerald-700 dark:text-emerald-400">
-              <CheckCircle2 className="size-5 shrink-0" />
-              <p className="text-sm">
-                Pembayaran berhasil dikonfirmasi. Pesananmu sedang diproses
-                toko.
-              </p>
-            </div>
+            <Button
+              size="lg"
+              className="w-full"
+              onClick={() =>
+                router.push(
+                  `/pesanan/status?paid=true&method=${method.id}`
+                )
+              }
+            >
+              Lihat Status Pesanan
+            </Button>
           ) : (
             <Button size="lg" className="w-full" onClick={() => setConfirmed(true)}>
               Saya Sudah Bayar
-            </Button>
-          )}
-
-          {confirmed && (
-            <Button variant="outline" onClick={() => router.push("/")}>
-              Kembali ke Menu
             </Button>
           )}
         </div>
