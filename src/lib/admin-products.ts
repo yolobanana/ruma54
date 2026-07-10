@@ -28,6 +28,7 @@ export interface ProductInput {
   imageUrl: string;
   category: string;
   bakeEtaMinutes: number | null;
+  archived: boolean;
 }
 
 /** Validate + normalise a product payload. `partial` allows PATCH updates. */
@@ -74,6 +75,14 @@ export function parseProductInput(
       return { data: null, error: "Stok harus bilangan bulat >= 0" };
     }
     data.stock = stock;
+  }
+
+  // archived (only via PATCH, e.g. restore)
+  if (has("archived")) {
+    if (typeof b.archived !== "boolean") {
+      return { data: null, error: 'Field "archived" harus boolean' };
+    }
+    data.archived = b.archived;
   }
 
   // bakeEtaMinutes (optional/nullable)

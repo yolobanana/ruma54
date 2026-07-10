@@ -1,4 +1,4 @@
-import { asc } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 
 import { StockAdjuster } from "@/components/admin/stock-adjuster";
 import { Badge } from "@/components/ui/badge";
@@ -9,7 +9,11 @@ import { getStockLevel } from "@/lib/stock";
 export const dynamic = "force-dynamic";
 
 export default async function AdminStockPage() {
-  const rows = await db.select().from(products).orderBy(asc(products.stock));
+  const rows = await db
+    .select()
+    .from(products)
+    .where(eq(products.archived, false))
+    .orderBy(asc(products.stock));
 
   const outOfStock = rows.filter((p) => getStockLevel(p) === "out").length;
   const lowStock = rows.filter((p) => getStockLevel(p) === "low").length;

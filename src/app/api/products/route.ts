@@ -1,4 +1,4 @@
-import { and, eq, like, or } from "drizzle-orm";
+import { and, eq, like, or, type SQL } from "drizzle-orm";
 import { NextResponse, type NextRequest } from "next/server";
 
 import { db } from "@/db";
@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
   const q = searchParams.get("q")?.trim() ?? "";
   const category = searchParams.get("category")?.trim() ?? "";
 
-  const conditions = [];
+  const conditions: SQL[] = [eq(products.archived, false)];
 
   if (category && category !== "Semua") {
     conditions.push(eq(products.category, category));
@@ -17,15 +17,17 @@ export async function GET(request: NextRequest) {
 
   if (q) {
     const pattern = `%${q}%`;
-    conditions.push(
-      or(like(products.name, pattern), like(products.category, pattern))
+    const search = or(
+      like(products.name, pattern),
+      like(products.category, pattern)
     );
+    if (search) conditions.push(search);
   }
 
   const rows = await db
     .select()
     .from(products)
-    .where(conditions.length ? and(...conditions) : undefined);
+    .where(and(...conditions));
 
   return NextResponse.json({ products: rows });
 }

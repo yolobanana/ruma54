@@ -34,6 +34,11 @@ export async function PATCH(
   return NextResponse.json({ ok: true });
 }
 
+/**
+ * Soft-delete: archive the product rather than removing the row, so order
+ * history and in-progress carts (which reference products by FK) stay intact.
+ * Restore via PATCH { archived: false }.
+ */
 export async function DELETE(
   _request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -50,6 +55,6 @@ export async function DELETE(
     return NextResponse.json({ error: "Roti tidak ditemukan" }, { status: 404 });
   }
 
-  await db.delete(products).where(eq(products.id, id));
-  return NextResponse.json({ ok: true });
+  await db.update(products).set({ archived: true }).where(eq(products.id, id));
+  return NextResponse.json({ ok: true, archived: true });
 }

@@ -9,6 +9,7 @@ export const products = sqliteTable("products", {
   imageUrl: text("image_url").notNull(),
   category: text("category").notNull(),
   bakeEtaMinutes: integer("bake_eta_minutes"),
+  archived: integer("archived", { mode: "boolean" }).notNull().default(false),
 });
 
 export type ProductRow = typeof products.$inferSelect;

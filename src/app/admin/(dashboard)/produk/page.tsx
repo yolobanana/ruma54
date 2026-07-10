@@ -1,6 +1,7 @@
 import Link from "next/link";
 
-import { DeleteProductButton } from "@/components/admin/delete-product-button";
+import { ArchiveProductButton } from "@/components/admin/archive-product-button";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { db } from "@/db";
 import { products } from "@/db/schema";
@@ -11,6 +12,8 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminProductsPage() {
   const rows = await db.select().from(products);
+  const activeCount = rows.filter((p) => !p.archived).length;
+  const archivedCount = rows.length - activeCount;
 
   return (
     <div className="flex flex-col gap-6">
@@ -18,7 +21,8 @@ export default async function AdminProductsPage() {
         <div>
           <h1 className="text-2xl font-semibold">Produk</h1>
           <p className="text-sm text-muted-foreground">
-            {rows.length} roti terdaftar.
+            {activeCount} aktif
+            {archivedCount > 0 ? ` · ${archivedCount} diarsipkan` : ""}.
           </p>
         </div>
         <Button asChild size="lg">
@@ -49,8 +53,20 @@ export default async function AdminProductsPage() {
               </tr>
             )}
             {rows.map((product) => (
-              <tr key={product.id} className="border-b last:border-0">
-                <td className="px-4 py-3 font-medium">{product.name}</td>
+              <tr
+                key={product.id}
+                className={`border-b last:border-0 ${
+                  product.archived ? "opacity-55" : ""
+                }`}
+              >
+                <td className="px-4 py-3 font-medium">
+                  <span className="inline-flex items-center gap-2">
+                    {product.name}
+                    {product.archived && (
+                      <Badge variant="secondary">Diarsipkan</Badge>
+                    )}
+                  </span>
+                </td>
                 <td className="px-4 py-3 text-muted-foreground">
                   {product.category}
                 </td>
@@ -66,7 +82,11 @@ export default async function AdminProductsPage() {
                     <Button asChild variant="outline" size="sm">
                       <Link href={`/admin/produk/${product.id}`}>Edit</Link>
                     </Button>
-                    <DeleteProductButton id={product.id} name={product.name} />
+                    <ArchiveProductButton
+                      id={product.id}
+                      name={product.name}
+                      archived={product.archived}
+                    />
                   </div>
                 </td>
               </tr>
