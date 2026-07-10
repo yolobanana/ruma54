@@ -15,7 +15,7 @@ export async function GET(
     .from(products)
     .where(eq(products.id, id));
 
-  if (!product) {
+  if (!product || product.archived) {
     return NextResponse.json({ error: "Roti tidak ditemukan" }, { status: 404 });
   }
 
