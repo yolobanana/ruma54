@@ -67,7 +67,7 @@ export default function CheckoutPage() {
                   <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
                     {group.label}
                   </span>
-                  <div className="flex flex-col gap-2">
+                  <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                     {group.methods.map((method) => {
                       const isSelected = selectedMethod === method.id;
                       return (
