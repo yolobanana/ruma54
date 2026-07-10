@@ -10,8 +10,8 @@ import { SiteHeader } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { getPaymentMethodById } from "@/lib/mock-payment-methods";
-import { getOrderStatusIndex, ORDER_STATUS_STEPS } from "@/lib/order-status";
 import { formatPrice } from "@/lib/utils";
+import { useSimulatedOrderStatus } from "@/lib/use-simulated-order-status";
 
 export default function LacakPesananPage() {
   return (
@@ -24,10 +24,11 @@ export default function LacakPesananPage() {
 function LacakPesananContent() {
   const searchParams = useSearchParams();
 
-  const status = searchParams.get("status");
   const method = getPaymentMethodById(searchParams.get("method") ?? "");
   const total = Number(searchParams.get("total") ?? 0);
-  const currentStep = ORDER_STATUS_STEPS[getOrderStatusIndex(status)];
+  const { currentStep, currentStatus, isSimulating } = useSimulatedOrderStatus(
+    searchParams.get("status")
+  );
 
   return (
     <div className="flex flex-1 flex-col">
@@ -51,10 +52,19 @@ function LacakPesananContent() {
             <span className="text-xl font-semibold text-primary">
               {currentStep.label}
             </span>
+            {isSimulating && (
+              <span className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
+                <span className="relative flex size-2">
+                  <span className="absolute inline-flex size-full animate-ping rounded-full bg-primary/75" />
+                  <span className="relative inline-flex size-2 rounded-full bg-primary" />
+                </span>
+                Memperbarui otomatis&hellip;
+              </span>
+            )}
           </Card>
 
           <Card className="p-4">
-            <OrderStatusTimeline currentStatus={status} />
+            <OrderStatusTimeline currentStatus={currentStatus} />
           </Card>
 
           {(method || total > 0) && (
