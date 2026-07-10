@@ -13,3 +13,25 @@ export const products = sqliteTable("products", {
 
 export type ProductRow = typeof products.$inferSelect;
 export type NewProductRow = typeof products.$inferInsert;
+
+export const adminUsers = sqliteTable("admin_users", {
+  id: text("id").primaryKey(),
+  username: text("username").notNull().unique(),
+  passwordHash: text("password_hash").notNull(),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
+});
+
+export type AdminUserRow = typeof adminUsers.$inferSelect;
+export type NewAdminUserRow = typeof adminUsers.$inferInsert;
+
+export const adminSessions = sqliteTable("admin_sessions", {
+  token: text("token").primaryKey(),
+  adminUserId: text("admin_user_id")
+    .notNull()
+    .references(() => adminUsers.id, { onDelete: "cascade" }),
+  expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
+});
+
+export type AdminSessionRow = typeof adminSessions.$inferSelect;
+export type NewAdminSessionRow = typeof adminSessions.$inferInsert;
