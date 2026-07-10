@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "RotiPilih",
+  title: "Ruma54",
   description: "Pesan roti favoritmu online, ambil tanpa antre di toko.",
 };
 

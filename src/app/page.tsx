@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div className="flex flex-1 flex-col">
       <SiteHeader>
-        <h1 className="text-2xl font-semibold">RotiPilih</h1>
+        <h1 className="text-2xl font-semibold">Ruma54</h1>
         <p className="text-sm text-muted-foreground">
           Pesan roti favoritmu online, ambil tanpa antre di toko.
         </p>
