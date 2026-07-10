@@ -9,7 +9,6 @@ import { PaymentStatusIndicator } from "@/components/payment-status-indicator";
 import { SiteHeader } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { useCart } from "@/context/cart-context";
 import { getPaymentMethodById } from "@/lib/mock-payment-methods";
 import { formatPrice } from "@/lib/utils";
 
@@ -23,10 +22,10 @@ export default function StatusPembayaranPage() {
 
 function StatusPembayaranContent() {
   const searchParams = useSearchParams();
-  const { totalPrice } = useCart();
 
   const isPaid = searchParams.get("paid") === "true";
   const method = getPaymentMethodById(searchParams.get("method") ?? "");
+  const total = Number(searchParams.get("total") ?? 0);
 
   return (
     <div className="flex flex-1 flex-col">
@@ -53,7 +52,7 @@ function StatusPembayaranContent() {
             </div>
             <div className="flex items-center justify-between border-t pt-3 font-semibold">
               <span>Total</span>
-              <span>{formatPrice(totalPrice)}</span>
+              <span>{formatPrice(total)}</span>
             </div>
           </Card>
 

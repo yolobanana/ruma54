@@ -24,10 +24,18 @@ export default function KonfirmasiPembayaranPage() {
 function KonfirmasiPembayaranContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { totalPrice } = useCart();
+  const { totalPrice, clearCart } = useCart();
   const [confirmed, setConfirmed] = useState(false);
+  const [paidTotal, setPaidTotal] = useState<number | null>(null);
 
   const method = getPaymentMethodById(searchParams.get("method") ?? "");
+  const displayTotal = confirmed && paidTotal !== null ? paidTotal : totalPrice;
+
+  function handleConfirmPayment() {
+    setPaidTotal(totalPrice);
+    setConfirmed(true);
+    clearCart();
+  }
 
   if (!method) {
     return (
@@ -81,7 +89,7 @@ function KonfirmasiPembayaranContent() {
                 Total yang harus dibayar
               </span>
               <span className="text-xl font-semibold">
-                {formatPrice(totalPrice)}
+                {formatPrice(displayTotal)}
               </span>
             </div>
           </Card>
@@ -99,7 +107,7 @@ function KonfirmasiPembayaranContent() {
                 <p className="text-sm text-muted-foreground">
                   Scan kode QR di atas menggunakan aplikasi bank atau e-wallet
                   favoritmu, lalu selesaikan pembayaran sejumlah{" "}
-                  {formatPrice(totalPrice)}.
+                  {formatPrice(displayTotal)}.
                 </p>
               </div>
             )}
@@ -112,7 +120,7 @@ function KonfirmasiPembayaranContent() {
                 <p className="text-sm text-muted-foreground">
                   Buka aplikasi <strong>{method.name}</strong>, pilih menu
                   Bayar/Scan, lalu selesaikan pembayaran sejumlah{" "}
-                  {formatPrice(totalPrice)} untuk pesanan RotiPilih-mu.
+                  {formatPrice(displayTotal)} untuk pesanan RotiPilih-mu.
                 </p>
               </div>
             )}
@@ -133,7 +141,7 @@ function KonfirmasiPembayaranContent() {
                   </div>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  Transfer tepat sejumlah <strong>{formatPrice(totalPrice)}</strong>{" "}
+                  Transfer tepat sejumlah <strong>{formatPrice(displayTotal)}</strong>{" "}
                   ke nomor Virtual Account di atas melalui ATM, mobile banking,
                   atau internet banking {method.name.replace("Transfer ", "")}.
                 </p>
@@ -147,14 +155,14 @@ function KonfirmasiPembayaranContent() {
               className="w-full"
               onClick={() =>
                 router.push(
-                  `/pesanan/status?paid=true&method=${method.id}`
+                  `/pesanan/status?paid=true&method=${method.id}&total=${displayTotal}`
                 )
               }
             >
               Lihat Status Pesanan
             </Button>
           ) : (
-            <Button size="lg" className="w-full" onClick={() => setConfirmed(true)}>
+            <Button size="lg" className="w-full" onClick={handleConfirmPayment}>
               Saya Sudah Bayar
             </Button>
           )}
